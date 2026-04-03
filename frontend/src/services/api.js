@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://pincode-search-3xe6.onrender.com',
   timeout: 10000,
 });
 
