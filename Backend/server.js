@@ -3,14 +3,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { stringify } = require("csv-stringify");
-const path = require("path");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// Serve Static Files (Frontend Build)
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // ===============================
 // ✅ MongoDB Connection
@@ -315,10 +311,10 @@ app.get("/district/:district_name", async (req, res) => {
 });
 
 // ===============================
-// ✅ 11. Catch-all Route (for React Router)
+// ✅ Default route
 // ===============================
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+app.get("/", (req, res) => {
+  res.send("🚀 Production-ready Pincode API is running...");
 });
 
 // ===============================
