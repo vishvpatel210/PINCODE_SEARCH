@@ -1,10 +1,19 @@
 import { Moon, Sun, MapPin } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { motion } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
+
+const navLinks = [
+  { path: '/', label: 'Home' },
+  { path: '/dashboard', label: 'Dashboard' },
+  { path: '/explore', label: 'Explore' },
+  { path: '/about', label: 'About' },
+];
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === 'dark';
+  const location = useLocation();
 
   return (
     <nav className="sticky top-0 z-50 glass border-b border-white/10 dark:border-slate-800/60">
@@ -17,37 +26,82 @@ export default function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="relative">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
-                <MapPin className="w-5 h-5 text-white" />
+            <Link to="/" className="flex items-center gap-2.5">
+              <div className="relative">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
+                  <MapPin className="w-5 h-5 text-white" />
+                </div>
+                <div className="absolute -inset-1 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 opacity-20 blur-md" />
               </div>
-              <div className="absolute -inset-1 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 opacity-20 blur-md" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent">
-              Pincode Finder
-            </span>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400 bg-clip-text text-transparent">
+                Pincode Finder
+              </span>
+            </Link>
           </motion.div>
 
-          {/* Theme Toggle */}
-          <motion.button
-            onClick={toggleTheme}
-            className="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 group"
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ scale: 1.05 }}
-            aria-label="Toggle theme"
-          >
-            <motion.div
-              initial={false}
-              animate={{ rotate: isDark ? 180 : 0 }}
-              transition={{ duration: 0.5, type: 'spring' }}
+          {/* Nav Links + Theme Toggle */}
+          <div className="flex items-center gap-1">
+            {/* Nav Links */}
+            <div className="hidden sm:flex items-center gap-1 mr-2">
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                      isActive
+                        ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Theme Toggle */}
+            <motion.button
+              onClick={toggleTheme}
+              className="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 group"
+              whileTap={{ scale: 0.9 }}
+              whileHover={{ scale: 1.05 }}
+              aria-label="Toggle theme"
             >
-              {isDark ? (
-                <Sun className="w-5 h-5 text-amber-400" />
-              ) : (
-                <Moon className="w-5 h-5 text-slate-600" />
-              )}
-            </motion.div>
-          </motion.button>
+              <motion.div
+                initial={false}
+                animate={{ rotate: isDark ? 180 : 0 }}
+                transition={{ duration: 0.5, type: 'spring' }}
+              >
+                {isDark ? (
+                  <Sun className="w-5 h-5 text-amber-400" />
+                ) : (
+                  <Moon className="w-5 h-5 text-slate-600" />
+                )}
+              </motion.div>
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Mobile Nav */}
+        <div className="flex sm:hidden items-center gap-1 pb-2 overflow-x-auto -mx-4 px-4">
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 ${
+                  isActive
+                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </nav>
