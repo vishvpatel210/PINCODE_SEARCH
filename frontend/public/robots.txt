@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pincode-search-1.onrender.com/sitemap.xml
+
+User-agent: *
+Disallow: /dashboard
+Disallow: /explore
+Disallow: /about
